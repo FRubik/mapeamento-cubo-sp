@@ -1,0 +1,31 @@
+# ─────────────────────────────────────────────────────────────────
+#  DADOS CONFIDENCIAIS — NUNCA PUBLICAR
+# ─────────────────────────────────────────────────────────────────
+# Respostas brutas da pesquisa (contêm nome, WhatsApp e e-mail dos respondentes)
+Mapeamento_SP_limpo_com_RA.csv
+# Qualquer PDF, incluindo o relatório técnico dos delegados (detalhe por RA + falas literais)
+*.pdf
+# Gerador do relatório dos delegados: embute falas literais/anonimizadas dos respondentes
+gen_pdf.py
+
+# ─────────────────────────────────────────────────────────────────
+#  DADOS DE TERCEIROS (muito grandes)
+# ─────────────────────────────────────────────────────────────────
+# Export público oficial da WCA (vários GB) — baixe em worldcubeassociation.org/export/results
+WCA_export/
+
+# ─────────────────────────────────────────────────────────────────
+#  AMBIENTE E ARTEFATOS DE BUILD
+# ─────────────────────────────────────────────────────────────────
+venv/
+__pycache__/
+*.pyc
+qa/
+divs.json
+plotly.min.js
+sheet*.png
+map_*.png
+map_test.png
+
+# Config local do editor / harness
+.claude/
