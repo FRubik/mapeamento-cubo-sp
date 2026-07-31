@@ -12,7 +12,7 @@ def _norm(s):
     s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode().lower().strip()
     return re.sub(r"\s+", " ", s)
 
-# CSV RA -> rótulo RA da Wikipédia
+# CSV RA -> rótulo RA da Wikipédia (as 16 RAs; nem todas têm respostas)
 CSV2WIKI = {
     "RM de São Paulo": "1ª Grande SP",
     "RA de Campinas": "5ª Campinas",
@@ -24,6 +24,12 @@ CSV2WIKI = {
     "RA de Barretos": "13ª Barretos",
     "RA de Franca": "14ª Franca",
     "RA de Sorocaba": "4ª Sorocaba",
+    "RA de São José do Rio Preto": "8ª São José do Rio Preto",
+    "RA de Bauru": "7ª Bauru",
+    "RA de Araçatuba": "9ª Araçatuba",
+    "RA de Marília": "11ª Marília",
+    "RA de Registro": "2Aª Registro",
+    "RA Central": "12ª Central",
 }
 # nome bonito para exibir por rótulo wiki
 WIKI_NICE = {

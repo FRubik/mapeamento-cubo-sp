@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 import os, json
 SCR=os.path.dirname(os.path.abspath(__file__))
-D=json.load(open(os.path.join(SCR,"divs.json")))["divs"]
+_J=json.load(open(os.path.join(SCR,"divs.json")))
+D=_J["divs"]
+S=_J["stats"]
+N, N_SP = S["n"], S["n_sp"]
+N_COMPS, RAS_SEM = S["n_comps"], S["ras_sem_comp"]
 PLOTLYJS=open(os.path.join(SCR,"plotly.min.js")).read()
 
 def chart(div_key, title, desc):
@@ -80,7 +84,7 @@ HTML = f"""<!doctype html>
 
 <div class="wrap">
 
-<p class="lead">Entre junho e julho de 2026, pessoas que praticam cubo mágico responderam a uma pesquisa sobre como vivem o hobby: onde moram, o que competem, o que atrapalha e o que gostariam de ver mudar. Reunimos essas respostas e as comparamos com o histórico oficial de competições da <b>WCA</b>. Esta página conta, em linguagem simples, o que encontramos.</p>
+<p class="lead">Em julho de 2026, {N} pessoas que praticam cubo mágico responderam a uma pesquisa sobre como vivem o hobby: onde moram, o que competem, o que atrapalha e o que gostariam de ver mudar. Reunimos essas respostas e as comparamos com o histórico oficial de competições da <b>WCA</b>. Esta página conta, em linguagem simples, o que encontramos.</p>
 
 <div class="box">
   <h4>Como ler esta página</h4>
@@ -96,10 +100,10 @@ HTML = f"""<!doctype html>
 </div>
 
 <div class="kpis">
-  <div class="kpi"><b>61</b><small>pessoas responderam</small></div>
-  <div class="kpi"><b>55</b><small>moram em São Paulo</small></div>
-  <div class="kpi"><b>97</b><small>competições em SP desde 2023</small></div>
-  <div class="kpi"><b>6</b><small>regiões do estado sem nenhuma competição</small></div>
+  <div class="kpi"><b>{N}</b><small>pessoas responderam</small></div>
+  <div class="kpi"><b>{N_SP}</b><small>moram em São Paulo</small></div>
+  <div class="kpi"><b>{N_COMPS}</b><small>competições em SP desde 2023</small></div>
+  <div class="kpi"><b>{RAS_SEM}</b><small>regiões do estado sem nenhuma competição</small></div>
 </div>
 
 <div class="box warn">
@@ -176,7 +180,7 @@ HTML = f"""<!doctype html>
 </ul>
 
 <footer>
-  <p><b>Sobre os dados.</b> Pesquisa com {61} respostas voluntárias (55 de São Paulo), coletadas em 2026 — é um retrato de quem participou, não uma amostra estatística da população. Perguntas de múltipla escolha permitem mais de uma marcação, então as somas podem passar do total de pessoas. As competições vêm do export público oficial da WCA; cada uma foi localizada em sua Região Administrativa pela latitude/longitude registrada. O ano de 2026 está incompleto. Populações citadas são aproximadas (Censo 2022).</p>
+  <p><b>Sobre os dados.</b> Pesquisa com {N} respostas voluntárias ({N_SP} de São Paulo), coletadas em 2026 — é um retrato de quem participou, não uma amostra estatística da população. Perguntas de múltipla escolha permitem mais de uma marcação, então as somas podem passar do total de pessoas. As competições vêm do export público oficial da WCA; cada uma foi localizada em sua Região Administrativa pela latitude/longitude registrada. O ano de 2026 está incompleto. Populações citadas são aproximadas (Censo 2022).</p>
   <p><b>Confidencialidade.</b> A origem das respostas é mostrada apenas em grandes blocos regionais; nenhum dado individual, cidade ou contato é divulgado.</p>
   <p>Fontes: <a href="https://www.worldcubeassociation.org/export/results">WCA Results Export</a> · malha municipal de SP (IBGE / geodata-br) · divisão em Regiões Administrativas (Governo de SP).</p>
 </footer>
@@ -184,6 +188,6 @@ HTML = f"""<!doctype html>
 </body>
 </html>"""
 
-out=os.path.join(SCR,"relatorio_publico.html")
+out=os.path.join(SCR,"index.html")   # nome usado pelo GitHub Pages
 open(out,"w").write(HTML)
 print("gerado:", out, "-", round(len(HTML)/1024/1024,2), "MB")

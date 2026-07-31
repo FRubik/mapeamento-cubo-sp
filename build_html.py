@@ -266,9 +266,16 @@ except Exception:
     import plotly
     p = os.path.join(os.path.dirname(plotly.__file__), "package_data", "plotly.min.js")
     plotlyjs = open(p).read()
-json.dump({"divs":DIVS}, open(os.path.join(SCR,"divs.json"),"w"))
+STATS = {
+    "n": int(N),
+    "n_sp": int((df[C[25]]=="SP").sum()),
+    "n_comps": int(len(sp)),
+    "ras_sem_comp": int(sum(1 for r in allras if racount.get(r,0)==0)),
+}
+json.dump({"divs":DIVS,"stats":STATS}, open(os.path.join(SCR,"divs.json"),"w"))
 open(os.path.join(SCR,"plotly.min.js"),"w").write(plotlyjs)
 print("figuras geradas:", list(DIVS.keys()))
+print("stats:", STATS)
 print("respostas por macrorregião:", tc.to_dict())
 print("comps por região:", rx.to_dict())
 print("mapa classes:", mdf.set_index("ra")["n"].to_dict())

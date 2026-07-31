@@ -10,11 +10,10 @@ a participação e onde acontecem (ou faltam) campeonatos no estado.
 
 O resultado final, pensado para todos os públicos, é uma página única e interativa:
 
-- **[`relatorio_publico.html`](relatorio_publico.html)** — gráficos interativos (Plotly),
+- **[`index.html`](index.html)** — gráficos interativos (Plotly),
   autocontido (funciona offline, sem dependências externas).
 
-> Para publicar como site (GitHub Pages), renomeie/duplique o arquivo como `index.html`
-> e ative o Pages nas configurações do repositório.
+> O arquivo já se chama `index.html`: basta ativar o Pages nas configurações do repositório.
 
 ## 🔒 Confidencialidade
 
@@ -32,7 +31,8 @@ Os arquivos sensíveis estão listados no [`.gitignore`](.gitignore).
 
 | Arquivo | O que é |
 |---|---|
-| `relatorio_publico.html` | Relatório público final (interativo). |
+| `index.html` | Relatório público final (interativo). |
+| `limpar_respostas.py` | Limpa o CSV bruto do formulário: normaliza a cidade digitada e acrescenta `Cidade (limpa)`, `UF` e `Região Administrativa`. |
 | `build_html.py` | Gera as figuras Plotly a partir dos dados. |
 | `assemble.py` | Monta o HTML final (texto + gráficos). |
 | `mapdata.py` | Associa cada município de SP à sua Região Administrativa e dissolve os polígonos. |
@@ -47,7 +47,10 @@ Os arquivos sensíveis estão listados no [`.gitignore`](.gitignore).
 
 ```bash
 python -m venv venv && source venv/bin/activate
-pip install pandas numpy shapely plotly kaleido
+pip install pandas numpy matplotlib shapely plotly
+
+# limpar as respostas brutas do formulário (gera Mapeamento_SP_limpo_com_RA.csv)
+python limpar_respostas.py
 
 # (opcional) reextrair os dados da WCA — requer a pasta WCA_export/ baixada
 python prep_wca.py
@@ -56,6 +59,9 @@ python prep_wca.py
 python build_html.py
 python assemble.py
 ```
+
+`limpar_respostas.py` avisa no terminal toda cidade que não conseguiu casar com a lista
+oficial de municípios — nesse caso, basta acrescentá-la aos dicionários do próprio script.
 
 Rodar o `build_html.py` a partir da pesquisa completa exige o CSV bruto das respostas,
 que **não** é distribuído. Os arquivos agregados incluídos aqui permitem reproduzir a
