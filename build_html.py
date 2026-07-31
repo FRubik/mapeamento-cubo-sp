@@ -224,6 +224,68 @@ DIVS["dem_of"]=emb(grouped_hbar(names,demand,offerp,
     height=560,suffix="%"),"g_demof")
 
 # ============================================================
+# DEMANDA LATENTE — popular × esquecido
+# ============================================================
+import demanda_eventos
+DE = demanda_eventos.tabela(df)
+LAT_AZUL = "#9fb6d4"
+
+def _quadrante(sub, nome, cor):
+    return go.Scatter(
+        x=sub["oferta"]*100, y=sub["taxa"]*100, name=nome, mode="markers+text",
+        text=["OH" if e.startswith("OH") else e for e in sub["evento"]],
+        textposition=sub["textpos"], textfont=dict(size=11, color=INK2),
+        marker=dict(size=sub["pratica"], sizemode="area",
+                    sizeref=2.*DE["pratica"].max()/(34.**2), sizemin=6,
+                    color=cor, line=dict(color=SURF, width=1.5)),
+        customdata=np.stack([sub["evento"], sub["pratica"], sub["pede"]], axis=-1),
+        hovertemplate="<b>%{customdata[0]}</b><br>aparece em %{x:.0f}% das competições<br>"
+                      "%{y:.0f}% de quem pratica quer ver mais<br>"
+                      "%{customdata[1]} praticantes · %{customdata[2]} pedidos<extra></extra>",
+    )
+
+TEXTPOS = {"5BLD":"bottom center","Skewb":"bottom center","6x6":"bottom left",
+           "OH (uma mão)":"middle right","5x5":"top left","4x4":"top right"}
+DE["textpos"] = [TEXTPOS.get(e, "top center") for e in DE["evento"]]
+figq = go.Figure()
+figq.add_shape(type="rect", x0=0, x1=demanda_eventos.OFERTA_BAIXA*100,
+               y0=demanda_eventos.TAXA_ALTA*100, y1=132,
+               fillcolor="#fdf1ea", line_width=0, layer="below")
+figq.add_vline(x=demanda_eventos.OFERTA_BAIXA*100, line_color=GRID, line_width=1)
+figq.add_hline(y=demanda_eventos.TAXA_ALTA*100, line_color=GRID, line_width=1)
+figq.add_trace(_quadrante(DE[DE.latente], "Muito pedido, pouco programado", ORANGE))
+figq.add_trace(_quadrante(DE[~DE.latente], "Já bem atendidos", LAT_AZUL))
+figq.add_annotation(x=1.5, y=130, text="<b>DEMANDA LATENTE</b>", showarrow=False,
+                    xanchor="left", yanchor="top", font=dict(size=12, color=ORANGE))
+style(figq, 520, legend=True)
+figq.update_xaxes(title_text="Em quantas competições de SP a modalidade aparece (2023+)",
+                  range=[0, 76], ticksuffix="%", title_font_size=12)
+figq.update_yaxes(title_text="Quer ver mais — % de quem já pratica", range=[26, 132],
+                  ticksuffix="%", showgrid=True, gridcolor=GRID, title_font_size=12)
+figq.update_layout(margin=dict(l=8, r=18, t=40, b=8))
+DIVS["quadrante"] = emb(figq, "g_quadrante")
+
+# tração: quanta gente o evento reúne quando é programado
+_ref = DE[DE.evento.isin(["3x3", "2x2"])]
+_bar = pd.concat([_ref.sort_values("media_part"), DE[DE.latente].sort_values("media_part")])
+figt = go.Figure()
+for sub, nome, cor in ((_bar[_bar.latente], "Demanda latente", ORANGE),
+                       (_bar[~_bar.latente], "Régua de comparação", LAT_AZUL)):
+    figt.add_bar(y=sub["evento"], x=sub["media_part"], name=nome, orientation="h",
+                 marker_color=cor, text=[f"{v:.0f}" for v in sub["media_part"]],
+                 textposition="outside", cliponaxis=False,
+                 textfont=dict(size=12, color=INK2),
+                 hovertemplate="%{y}<br><b>%{x:.0f}</b> competidores em média<extra></extra>")
+style(figt, 420, legend=True)
+# de baixo para cima: a régua embaixo, os eventos de demanda latente no topo
+figt.update_yaxes(categoryorder="array", categoryarray=list(_bar["evento"]))
+figt.update_xaxes(range=[0, _bar["media_part"].max()*1.14],
+                  title_text="competidores, em média, por competição em que apareceu",
+                  title_font_size=12)
+figt.update_layout(margin=dict(l=8, r=30, t=36, b=8), bargap=0.34)
+DIVS["tracao"] = emb(figt, "g_tracao")
+
+# ============================================================
 # DECISÃO / OBSTÁCULOS
 # ============================================================
 oc=df[C[17]].value_counts()

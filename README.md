@@ -37,8 +37,11 @@ Os arquivos sensíveis estão listados no [`.gitignore`](.gitignore).
 | `assemble.py` | Monta o HTML final (texto + gráficos). |
 | `mapdata.py` | Associa cada município de SP à sua Região Administrativa e dissolve os polígonos. |
 | `prep_wca.py` | Extrai do export da WCA os dados de competições usados na análise. |
+| `prep_wca_eventos.py` | Extrai quantas pessoas competiram cada evento em cada competição de SP. |
+| `demanda_eventos.py` | Demanda **latente** por modalidade: separa "popular" de "está faltando". |
 | `sp_comps_2023.csv` | Competições oficiais de SP (2023+), já localizadas por RA. |
 | `event_freq.tsv` | Frequência de cada evento nas competições de SP. |
+| `event_participants.tsv` | Competidores por evento em cada competição de SP. |
 | `comp_competitors.tsv` | Nº de competidores por competição. |
 | `ra_sp.geojson` | As 16 Regiões Administrativas de SP (contornos). |
 | `sp_mun.json`, `mun2ra.json` | Malha municipal de SP e mapeamento município → RA. |
@@ -54,6 +57,10 @@ python limpar_respostas.py
 
 # (opcional) reextrair os dados da WCA — requer a pasta WCA_export/ baixada
 python prep_wca.py
+python prep_wca_eventos.py
+
+# conferir as métricas de demanda latente por modalidade
+python demanda_eventos.py
 
 # gerar as figuras e montar o HTML público
 python build_html.py
