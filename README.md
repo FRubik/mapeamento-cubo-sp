@@ -38,10 +38,16 @@ Os arquivos sensíveis estão listados no [`.gitignore`](.gitignore).
 | `mapdata.py` | Associa cada município de SP à sua Região Administrativa e dissolve os polígonos. |
 | `prep_wca.py` | Extrai do export da WCA os dados de competições usados na análise. |
 | `prep_wca_eventos.py` | Extrai quantas pessoas competiram cada evento em cada competição de SP. |
+| `prep_wca_retencao.py` | Estreantes em competições de SP e se voltaram a competir em 12 meses. |
+| `prep_wca_delegados.py` | Delegados e organizadores de cada competição paulista. |
+| `prep_pop_ibge.py` | Baixa a população dos municípios de SP (Censo 2022). |
 | `demanda_eventos.py` | Demanda **latente** por modalidade: separa "popular" de "está faltando". |
+| `cobertura.py` | Distância de cada município à competição mais próxima, ponderada pela população. |
 | `sp_comps_2023.csv` | Competições oficiais de SP (2023+), já localizadas por RA. |
 | `event_freq.tsv` | Frequência de cada evento nas competições de SP. |
 | `event_participants.tsv` | Competidores por evento em cada competição de SP. |
+| `retencao_regiao.tsv` | Estreantes e taxa de retorno em 12 meses, por região da 1ª competição. |
+| `pop_mun_sp.json` | População dos 645 municípios de SP (Censo 2022). |
 | `comp_competitors.tsv` | Nº de competidores por competição. |
 | `ra_sp.geojson` | As 16 Regiões Administrativas de SP (contornos). |
 | `sp_mun.json`, `mun2ra.json` | Malha municipal de SP e mapeamento município → RA. |
@@ -56,11 +62,15 @@ pip install pandas numpy matplotlib shapely plotly
 python limpar_respostas.py
 
 # (opcional) reextrair os dados da WCA — requer a pasta WCA_export/ baixada
-python prep_wca.py
-python prep_wca_eventos.py
+python prep_wca.py            # competições de SP (2023+), por RA
+python prep_wca_eventos.py    # competidores por evento
+python prep_wca_retencao.py   # estreantes e retenção em 12 meses
+python prep_wca_delegados.py  # delegados e organizadores (só relatório interno)
+python prep_pop_ibge.py       # população municipal (Censo 2022)
 
-# conferir as métricas de demanda latente por modalidade
+# conferir as métricas derivadas
 python demanda_eventos.py
+python cobertura.py
 
 # gerar as figuras e montar o HTML público
 python build_html.py
@@ -81,6 +91,8 @@ parte de competições e inspecionar toda a metodologia.
 - **Competições** — [WCA Results Export](https://www.worldcubeassociation.org/export/results) (dado público oficial).
 - **Malha geográfica** — municípios de SP ([IBGE / geodata-br](https://github.com/tbrugz/geodata-br)),
   agrupados nas 16 Regiões Administrativas do estado.
+- **População** — [Censo 2022, tabela 4709 (IBGE)](https://sidra.ibge.gov.br/tabela/4709), usada
+  para ponderar a distância até a competição mais próxima.
 
 ---
 

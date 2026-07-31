@@ -224,6 +224,84 @@ DIVS["dem_of"]=emb(grouped_hbar(names,demand,offerp,
     height=560,suffix="%"),"g_demof")
 
 # ============================================================
+# COBERTURA POPULACIONAL — o vazio em pessoas
+# ============================================================
+import cobertura
+ANO_COB = 2025
+MUN_COB = cobertura.municipios(ANO_COB)
+FX = cobertura.por_faixa(MUN_COB)
+POP_TOT = int(MUN_COB["pop"].sum())
+LONGE = int(MUN_COB.loc[MUN_COB.km > 100, "pop"].sum())
+COB_SERIE = {a: int(cobertura.municipios(a).query("km > 100")["pop"].sum())
+             for a in (2023, 2024, 2025)}
+
+def _mi(v):
+    return f"{v/1e6:.1f}".replace(".", ",")
+
+figc = go.Figure()
+for perto, nome, cor in ((True, "a até 100 km de uma competição", BLUE),
+                         (False, "a mais de 100 km", ORANGE)):
+    sub = FX[FX["faixa"].isin(["até 25 km", "25–50 km", "50–100 km"]) == perto]
+    figc.add_bar(y=sub["faixa"], x=sub["pop"]/1e6, name=nome, orientation="h",
+                 marker_color=cor,
+                 text=[f"{_mi(p)} mi ({q:.0f}%)" for p, q in zip(sub["pop"], sub["pct"])],
+                 textposition="outside", cliponaxis=False,
+                 textfont=dict(size=12, color=INK2),
+                 hovertemplate="%{y}<br><b>%{customdata[0]}</b> pessoas · %{customdata[1]:.0f}% do estado"
+                               "<extra></extra>",
+                 customdata=np.stack([[f"{p:,}".replace(",", ".") for p in sub["pop"]],
+                                      sub["pct"]], axis=-1))
+style(figc, 380, legend=True)
+figc.update_yaxes(categoryorder="array", categoryarray=list(FX["faixa"])[::-1])
+figc.update_xaxes(range=[0, (FX["pop"].max()/1e6)*1.35],
+                  title_text="milhões de habitantes", title_font_size=12)
+figc.update_layout(margin=dict(l=8, r=30, t=36, b=8), bargap=0.34)
+DIVS["cobertura"] = emb(figc, "g_cobertura")
+
+# ============================================================
+# RETENÇÃO DE ESTREANTES
+# ============================================================
+EST = pd.read_csv(os.path.join(SCR, "retencao_regiao.tsv"), sep="\t").set_index("regiao")
+REF_BR = "Resto do Brasil (referência)"
+REG_ORD = ["Capital (cidade de São Paulo)", "Grande SP, Campinas, Baixada e Vale",
+           "Interior distante (Norte, Oeste, Sul)", REF_BR]
+RET = EST.reindex(REG_ORD).rename(columns={"estreantes": "size", "taxa": "mean"})
+_sp = RET.drop(index=REF_BR)
+N_ESTREANTES_SP = int(_sp["size"].sum())
+RET_SP = float(_sp["retidos"].sum() / N_ESTREANTES_SP)
+
+figr = go.Figure()
+for reg_sel, nome, cor in (([r for r in REG_ORD if r != REF_BR], "Competições de SP", AQUA),
+                           ([REF_BR], "Média nacional", "#b9b9b3")):
+    sub = RET.loc[reg_sel]
+    figr.add_bar(y=[r.replace(" (referência)", "") for r in sub.index],
+                 x=sub["mean"]*100, name=nome, orientation="h", marker_color=cor,
+                 text=[f"{v*100:.0f}%" for v in sub["mean"]],
+                 textposition="outside", cliponaxis=False,
+                 textfont=dict(size=12, color=INK2),
+                 customdata=sub["size"],
+                 hovertemplate="%{y}<br><b>%{x:.0f}%</b> voltaram em até 12 meses"
+                               "<br>%{customdata} estreantes<extra></extra>")
+style(figr, 340, legend=True)
+figr.update_yaxes(categoryorder="array",
+                  categoryarray=[r.replace(" (referência)", "") for r in REG_ORD][::-1])
+figr.update_xaxes(range=[0, 75], ticksuffix="%")
+figr.update_layout(margin=dict(l=8, r=30, t=36, b=8), bargap=0.34)
+DIVS["retencao"] = emb(figr, "g_retencao")
+
+ENT = _sp["size"].astype(int)
+fige = go.Figure(go.Bar(
+    y=list(ENT.index), x=list(ENT.values), orientation="h", marker_color=BLUE,
+    text=[f"{v} ({v/N_ESTREANTES_SP*100:.0f}%)" for v in ENT.values],
+    textposition="outside", cliponaxis=False, textfont=dict(size=12, color=INK2),
+    hovertemplate="%{y}<br><b>%{x}</b> estreantes<extra></extra>"))
+style(fige, 340)
+fige.update_yaxes(categoryorder="array", categoryarray=list(ENT.index)[::-1])
+fige.update_xaxes(range=[0, ENT.max()*1.3])
+fige.update_layout(margin=dict(l=8, r=30, t=10, b=8), bargap=0.34)
+DIVS["entrada"] = emb(fige, "g_entrada")
+
+# ============================================================
 # DEMANDA LATENTE — popular × esquecido
 # ============================================================
 import demanda_eventos
@@ -333,6 +411,17 @@ STATS = {
     "n_sp": int((df[C[25]]=="SP").sum()),
     "n_comps": int(len(sp)),
     "ras_sem_comp": int(sum(1 for r in allras if racount.get(r,0)==0)),
+    "ano_cob": ANO_COB,
+    "pop_longe": LONGE,
+    "pop_longe_mi": _mi(LONGE),
+    "pop_longe_pct": round(LONGE/POP_TOT*100),
+    "pop_perto_pct": round(float(FX.loc[FX.faixa=="até 25 km","pct"].iloc[0])),
+    "cob_2023_mi": _mi(COB_SERIE[2023]),
+    "n_estreantes": N_ESTREANTES_SP,
+    "ret_sp": round(RET_SP*100),
+    "ret_br": round(float(RET.loc[REF_BR,"mean"])*100),
+    "ret_interior": round(float(RET.loc["Interior distante (Norte, Oeste, Sul)","mean"])*100),
+    "estreias_interior": int(RET.loc["Interior distante (Norte, Oeste, Sul)","size"]),
 }
 json.dump({"divs":DIVS,"stats":STATS}, open(os.path.join(SCR,"divs.json"),"w"))
 open(os.path.join(SCR,"plotly.min.js"),"w").write(plotlyjs)

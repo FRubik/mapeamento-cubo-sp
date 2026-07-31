@@ -52,7 +52,7 @@ sp["cidade"] = sp["city_name"].str.replace(", São Paulo", "", regex=False)
 sp["grupo"] = np.where(sp["cidade"] == "São Paulo", "Capital",
               np.where(sp["RA_nome"] == "RM de São Paulo", "RMSP exc. capital",
                        "Interior/Litoral"))
-sp[["id", "name", "cidade", "RA_nome", "year", "month", "day", "grupo"]] \
+sp[["id", "name", "cidade", "RA_nome", "year", "month", "day", "grupo", "lat", "lon"]] \
     .to_csv(os.path.join(BASE, "sp_comps_2023.csv"), index=False)
 ids = set(sp["id"])
 print(f"competições SP {ANO_MIN}+: {len(sp)}")

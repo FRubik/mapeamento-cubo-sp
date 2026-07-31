@@ -6,6 +6,10 @@ D=_J["divs"]
 S=_J["stats"]
 N, N_SP = S["n"], S["n_sp"]
 N_COMPS, RAS_SEM = S["n_comps"], S["ras_sem_comp"]
+ANO_COB, POP_LONGE_MI, POP_LONGE_PCT = S["ano_cob"], S["pop_longe_mi"], S["pop_longe_pct"]
+POP_PERTO_PCT, COB_2023_MI = S["pop_perto_pct"], S["cob_2023_mi"]
+N_ESTR, RET_SP, RET_BR = S["n_estreantes"], S["ret_sp"], S["ret_br"]
+RET_INT, ESTR_INT = S["ret_interior"], S["estreias_interior"]
 PLOTLYJS=open(os.path.join(SCR,"plotly.min.js")).read()
 
 def chart(div_key, title, desc):
@@ -151,12 +155,41 @@ HTML = f"""<!doctype html>
   <p style="margin:.3em 0">Não é o caso de "capital desassistida × interior bem servido". É o contrário do que a soma sugere: as competições se concentram num <b>cinturão leste compacto</b>, e quem mora no interior distante (Rio Preto, Bauru, Marília, Araçatuba, Presidente Prudente, Franca…) precisa de viagens de <b>200 a 400&nbsp;km</b> para competir. A distância, aliás, é o obstáculo nº 1 de toda a comunidade.</p>
 </div>
 
-<h2><span class="num">4.</span> O que a comunidade quer competir × o que aparece</h2>
+<h2><span class="num">4.</span> O mesmo vazio, medido em pessoas</h2>
+<p>O mapa da seção anterior mostra território. Mas território não vai a campeonato — gente vai. Então refizemos a conta em pessoas: para cada um dos 645 municípios de São Paulo, medimos a distância até a competição mais próxima realizada em {ANO_COB} e somamos a população de cada faixa (Censo 2022).</p>
+
+{chart('cobertura','Onde mora a população, em relação à competição mais próxima', f'Distância em linha reta do centro de cada município até a sede de competição mais próxima de {ANO_COB}, somando a população do Censo 2022. Por ser linha reta, a viagem real é sempre maior.')}
+
+<p>O resultado tem dois lados. O primeiro é tranquilizador: <b>{POP_PERTO_PCT}% dos paulistas</b> moram a menos de 25 km de uma sede de competição. Na média, o estado é bem servido — reflexo de a maior parte da população estar na Grande São Paulo e em Campinas.</p>
+
+<div class="box warn">
+  <h4>O que a média esconde</h4>
+  <p style="margin:.3em 0">Em {ANO_COB}, <b>{POP_LONGE_MI} milhões de paulistas</b> ({POP_LONGE_PCT}% do estado) não tiveram <b>nenhuma</b> competição a menos de 100 km de casa. São cidades grandes e com cena própria de cubo mágico — Bauru, Marília, Araçatuba, Franca. A situação vem melhorando (eram {COB_2023_MI} milhões em 2023), mas a lacuna ainda tem o tamanho de uma região metropolitana inteira.</p>
+</div>
+
+<p>Essa conta também mostra <b>onde uma competição nova rende mais</b>. Mais um campeonato na capital atende gente que já tem vários por ano a poucos quilômetros. Um campeonato em Bauru ou Marília aproxima, de uma vez, centenas de milhares de pessoas que hoje não têm nada perto.</p>
+
+<h2><span class="num">5.</span> Quem começa, continua — o difícil é começar</h2>
+<p>Fica a pergunta natural: será que a distância faz as pessoas <b>desistirem</b> do hobby? Dá para responder com o histórico da WCA, sem depender do que a pesquisa diz. Pegamos todas as pessoas cuja <b>primeira competição na vida</b> foi um campeonato paulista de 2023 em diante — {N_ESTR} pessoas — e vimos quantas voltaram a competir em até 12 meses.</p>
+
+<div class="grid2">
+  <figure class="chart"><h3>Voltaram a competir em até 1 ano</h3><p class="cap">Por região da primeira competição. A última barra é a média do resto do Brasil.</p>{D['retencao']}</figure>
+  <figure class="chart"><h3>Onde as pessoas estrearam</h3><p class="cap">Número de estreantes por região da primeira competição.</p>{D['entrada']}</figure>
+</div>
+
+<p>A resposta é <b>não</b> — e com folga. {RET_SP}% dos estreantes paulistas voltaram a competir dentro de um ano, acima da média nacional ({RET_BR}%). E quem estreou no interior distante voltou <i>mais</i> ({RET_INT}%) do que quem estreou na capital, não menos. Faz sentido: quem enfrenta 200 km para a primeira competição já é alguém bastante decidido. (São só {ESTR_INT} pessoas nesse grupo, então o número exato é impreciso — mas a direção é clara.)</p>
+
+<div class="box">
+  <h4>Onde está o gargalo, então</h4>
+  <p style="margin:.3em 0">Está na <b>entrada</b>, não na saída. Das {N_ESTR} estreias em competições paulistas, apenas <b>{ESTR_INT}</b> aconteceram no interior distante — a mesma região onde moram os {POP_LONGE_MI} milhões de pessoas da seção anterior. A comunidade não perde quem entra: ela simplesmente quase não recebe gente nova de fora do eixo capital–Campinas, porque lá não existe uma primeira competição para ir.</p>
+</div>
+
+<h2><span class="num">6.</span> O que a comunidade quer competir × o que aparece</h2>
 <p>Cada competição escolhe quais modalidades vai oferecer. Comparamos o que as pessoas <b>gostariam de ver mais</b> (na pesquisa) com o que <b>de fato apareceu</b> nas competições paulistas desde 2023. O descompasso é claro em duas modalidades muito queridas:</p>
 {chart('dem_of','Demanda × oferta de modalidades','Barra azul: % de quem gostaria de ver a modalidade mais vezes. Barra laranja: % das competições de SP que ofereceram a modalidade.')}
 <p><b>Megaminx e Skewb</b> estão entre os mais desejados, mas aparecem em apenas cerca de um em cada quatro campeonatos. Vale um detalhe curioso: São Paulo tem uma cena forte de <b>competições especializadas</b> (só Clock, só de olhos vendados, só Big Cubes, só Square-1…) — cerca de um terço dos torneios. O problema é que elas se concentram em cidades como São Bernardo, Cubatão e Campinas, e quase nunca na capital.</p>
 
-<h2><span class="num">5.</span> Popular não é a mesma coisa que faltando</h2>
+<h2><span class="num">7.</span> Popular não é a mesma coisa que faltando</h2>
 <p>O gráfico anterior tem uma armadilha, e vale desarmá-la: contar quantas pessoas pediram uma modalidade mede o <b>tamanho da torcida</b>, não o que está em falta. O 3x3 é o mais praticado de todos — é natural que apareça no topo dos pedidos, mesmo estando em dois terços das competições. A pergunta certa é outra: <b>entre quem já pratica aquela modalidade, que fração gostaria de vê-la mais vezes?</b></p>
 
 <p>É isso que o gráfico abaixo mostra. Cada bolha é uma modalidade; o tamanho dela é quanta gente pratica. Quanto mais à <b>esquerda</b>, menos as competições paulistas a programam. Quanto mais <b>acima</b>, maior a proporção de praticantes insatisfeitos com essa oferta. O canto laranja — muito pedida, pouco programada — é onde mora a <b>demanda latente</b>.</p>
@@ -181,7 +214,7 @@ HTML = f"""<!doctype html>
   <p style="margin:.3em 0">Se a intenção é atrair gente que hoje não vai, a lista curta que a pesquisa aponta é <b>Megaminx, Skewb e Square-1</b> — bom público, baixa oferta — e um bloco de <b>olhos vendados</b> (3BLD como porta de entrada, 4BLD/5BLD/MBLD para o pessoal que está esperando há tempo). São modalidades de cronograma curto: cabem ao lado do 3x3 sem esticar o dia, e provavelmente trarão competidores que, do contrário, ficariam em casa.</p>
 </div>
 
-<h2><span class="num">6.</span> O que pesa na decisão e o que atrapalha</h2>
+<h2><span class="num">8.</span> O que pesa na decisão e o que atrapalha</h2>
 <p>Na hora de decidir se vai a uma competição, três coisas dominam: <b>onde</b> ela acontece, <b>quais modalidades</b> terá e <b>em que data</b> cai. O preço da inscrição pesa bem menos do que se costuma imaginar.</p>
 <div class="grid2">
   <figure class="chart"><h3>O que mais pesa na decisão</h3><p class="cap">Fatores considerados (cada pessoa marcou até 3).</p>{D['decisao']}</figure>
@@ -191,15 +224,16 @@ HTML = f"""<!doctype html>
 {chart('viagem','Quanto gostariam de viajar × quanto viajam de fato','Distância máxima desejada (azul) e distância praticada (laranja).')}
 {chart('pagar','Quanto topariam pagar de inscrição','Faixa de preço aceita pela comunidade.')}
 
-<h2><span class="num">7.</span> Como a comunidade quer ser avisada</h2>
+<h2><span class="num">9.</span> Como a comunidade quer ser avisada</h2>
 <p>Hoje a maioria descobre as competições pelo site da WCA. Mas, perguntadas sobre como <b>gostariam</b> de ser avisadas, as pessoas colocam o <b>WhatsApp</b> em primeiro lugar — à frente do próprio site e do Instagram.</p>
 {chart('divulg','Como ficam sabendo hoje × como gostariam','Canais de divulgação: uso atual (laranja) e preferência (azul).')}
 
-<h2><span class="num">8.</span> Em resumo</h2>
+<h2><span class="num">10.</span> Em resumo</h2>
 <ul class="take">
   <li><b>Localização é tudo.</b> Distância é o maior obstáculo e o principal fator na decisão de competir.</li>
   <li><b>A capital não sofre de falta de competições em número</b> — sofre de baixa oferta das modalidades preferidas e de um desejo de competir com mais frequência.</li>
-  <li><b>O interior distante é o verdadeiro vazio:</b> seis regiões sem nenhuma competição desde 2023 e viagens de centenas de quilômetros para o resto.</li>
+  <li><b>O interior distante é o verdadeiro vazio:</b> seis regiões sem nenhuma competição desde 2023 e viagens de centenas de quilômetros para o resto. Em {ANO_COB}, <b>{POP_LONGE_MI} milhões de paulistas</b> não tiveram competição a menos de 100 km.</li>
+  <li><b>Quem entra, fica — o difícil é entrar.</b> {RET_SP}% dos estreantes voltam a competir em um ano (média nacional: {RET_BR}%), mas só {ESTR_INT} das {N_ESTR} estreias aconteceram no interior distante.</li>
   <li><b>Megaminx e Skewb</b> são muito pedidos e pouco oferecidos.</li>
   <li><b>Popular não é o mesmo que faltando.</b> Descontando o tamanho da torcida de cada modalidade, quem realmente está em falta é <b>Megaminx, Skewb, Square-1</b> e as modalidades <b>de olhos vendados</b> — nestas últimas, há mais gente querendo entrar do que gente que já compete.</li>
   <li><b>WhatsApp</b> é o canal que a comunidade quer para receber avisos.</li>
@@ -208,7 +242,8 @@ HTML = f"""<!doctype html>
 <footer>
   <p><b>Sobre os dados.</b> Pesquisa com {N} respostas voluntárias ({N_SP} de São Paulo), coletadas em 2026 — é um retrato de quem participou, não uma amostra estatística da população. Perguntas de múltipla escolha permitem mais de uma marcação, então as somas podem passar do total de pessoas. As competições vêm do export público oficial da WCA; cada uma foi localizada em sua Região Administrativa pela latitude/longitude registrada. O ano de 2026 está incompleto. Populações citadas são aproximadas (Censo 2022).</p>
   <p><b>Confidencialidade.</b> A origem das respostas é mostrada apenas em grandes blocos regionais; nenhum dado individual, cidade ou contato é divulgado.</p>
-  <p>Fontes: <a href="https://www.worldcubeassociation.org/export/results">WCA Results Export</a> · malha municipal de SP (IBGE / geodata-br) · divisão em Regiões Administrativas (Governo de SP).</p>
+  <p><b>Cobertura e estreantes.</b> A distância até a competição mais próxima é medida em linha reta, do centro do município à sede — a viagem real é sempre maior. A população vem do Censo 2022 (IBGE). "Estreante" é quem fez a primeira competição da vida em São Paulo de 2023 em diante; só entram as estreias com 12 meses completos para voltar a competir.</p>
+  <p>Fontes: <a href="https://www.worldcubeassociation.org/export/results">WCA Results Export</a> · população dos municípios: <a href="https://sidra.ibge.gov.br/tabela/4709">Censo 2022 (IBGE)</a> · malha municipal de SP (IBGE / geodata-br) · divisão em Regiões Administrativas (Governo de SP).</p>
 </footer>
 </div>
 </body>

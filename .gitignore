@@ -8,6 +8,10 @@ Mapeamento da Comunidade de Cubo Mágico de SP.csv
 *.pdf
 # Gerador do relatório dos delegados: embute falas literais/anonimizadas dos respondentes
 gen_pdf.py
+# Nomes de delegados/organizadores (públicos na WCA, mas só usados no relatório interno)
+delegados_sp.tsv
+# Lista individual de estreantes (IDs da WCA); o repo publica o agregado retencao_regiao.tsv
+estreantes_sp.tsv
 
 # ─────────────────────────────────────────────────────────────────
 #  DADOS DE TERCEIROS (muito grandes)
