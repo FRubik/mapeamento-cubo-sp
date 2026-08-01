@@ -39,7 +39,7 @@ Os arquivos sensíveis estão listados no [`.gitignore`](.gitignore).
 | `prep_wca.py` | Extrai do export da WCA os dados de competições usados na análise. |
 | `prep_wca_eventos.py` | Extrai quantas pessoas competiram cada evento em cada competição de SP. |
 | `prep_wca_retencao.py` | Estreantes em competições de SP e se voltaram a competir em 12 meses. |
-| `prep_wca_delegados.py` | Delegados e organizadores de cada competição paulista. |
+| `prep_wca_delegados.py` | Delegados e organizadores de cada competição paulista, com a data da competição (permite considerar só o que já aconteceu). |
 | `prep_pop_ibge.py` | Baixa a população dos municípios de SP (Censo 2022). |
 | `demanda_eventos.py` | Demanda **latente** por modalidade: separa "popular" de "está faltando". |
 | `cobertura.py` | Distância de cada município à competição mais próxima, ponderada pela população. |

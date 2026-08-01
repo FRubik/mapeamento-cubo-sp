@@ -5,7 +5,10 @@ Lê os campos `delegates` e `organizers` do export da WCA — formato
 `[{Nome}{mailto:email}] [{Nome}{mailto:email}]` — para as competições de SP de
 2023 em diante, e salva um par (competição, pessoa) por linha.
 
-Saída: delegados_sp.tsv — comp_id, ano, papel, nome
+A data da competição vai junto para que a análise possa considerar apenas as
+competições **já realizadas** (as futuras já constam no export).
+
+Saída: delegados_sp.tsv — comp_id, ano, data, papel, nome
 """
 import os, re
 import pandas as pd
@@ -26,14 +29,16 @@ comp = pd.read_csv(os.path.join(WCA_DIR, "WCA_export_competitions.tsv"), sep="\t
                    low_memory=False, usecols=["id", "delegates", "organizers"])
 comp = comp[comp["id"].isin(set(sp["id"]))]
 ano = dict(zip(sp["id"], sp["year"]))
+data = dict(zip(sp["id"], pd.to_datetime(dict(year=sp["year"], month=sp["month"],
+                                              day=sp["day"])).dt.strftime("%Y-%m-%d")))
 
 linhas = []
 for r in comp.itertuples():
     for papel, campo in (("delegado", r.delegates), ("organizador", r.organizers)):
         for nome in _pessoas(campo):
-            linhas.append((r.id, ano[r.id], papel, nome))
+            linhas.append((r.id, ano[r.id], data[r.id], papel, nome))
 
-out = pd.DataFrame(linhas, columns=["comp_id", "ano", "papel", "nome"])
+out = pd.DataFrame(linhas, columns=["comp_id", "ano", "data", "papel", "nome"])
 out.to_csv(os.path.join(BASE, "delegados_sp.tsv"), sep="\t", index=False)
 print(f"{len(out)} vínculos em {out.comp_id.nunique()} competições")
 for papel in ("delegado", "organizador"):
