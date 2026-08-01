@@ -274,7 +274,7 @@ N_ESTREANTES_SP = int(_sp["size"].sum())
 RET_SP = float(_sp["retidos"].sum() / N_ESTREANTES_SP)
 
 figr = go.Figure()
-for reg_sel, nome, cor in (([r for r in REG_ORD if r != REF_BR], "Competições de SP", AQUA),
+for reg_sel, nome, cor in (([r for r in REG_ORD if r != REF_BR], "Competições de SP", ORANGE),
                            ([REF_BR], "Média nacional", "#b9b9b3")):
     sub = RET.loc[reg_sel]
     figr.add_bar(y=[r.replace(" (referência)", "") for r in sub.index],
