@@ -33,6 +33,8 @@ Os arquivos sensíveis estão listados no [`.gitignore`](.gitignore).
 |---|---|
 | `index.html` | Relatório público final (interativo). |
 | `limpar_respostas.py` | Limpa o CSV bruto do formulário: normaliza a cidade digitada e acrescenta `Cidade (limpa)`, `UF` e `Região Administrativa`. |
+| `brand.py` | Paleta única dos dois relatórios, derivada da identidade visual do Cubing SP. |
+| `COLOR_SCHEMA.md` | O esquema de cores: valores, papéis, convenções e as checagens de acessibilidade. |
 | `build_html.py` | Gera as figuras Plotly a partir dos dados. |
 | `assemble.py` | Monta o HTML final (texto + gráficos). |
 | `mapdata.py` | Associa cada município de SP à sua Região Administrativa e dissolve os polígonos. |

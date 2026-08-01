@@ -13,10 +13,13 @@ import mapdata
 SCR = os.path.dirname(os.path.abspath(__file__))
 
 # ---------------- paleta ----------------
-BLUE="#2a78d6"; ORANGE="#eb6834"; AQUA="#1baf7a"; INK="#0b0b0b"; INK2="#52514e"
-MUTED="#8a8981"; GRID="#ececE7"; SURF="#ffffff"
-MAP_CLASSES = [("Sem competição","#e4e4df"),("1–2","#c6dbef"),("3–5","#8fbfe8"),
-               ("6–10","#4a97d8"),("11 ou mais","#1f5fa8")]
+import brand
+# paleta da marca (ver brand.py e COLOR_SCHEMA.md): vermelho = série 1
+ORANGE=brand.S1; BLUE=brand.S2; AQUA=brand.S4; ACCENT=brand.S1
+INK=brand.INK; INK2=brand.INK2
+MUTED=brand.MUTED; GRID=brand.GRID; SURF=brand.SURF
+MAP_CLASSES = [("Sem competição",brand.SEQ_ZERO),("1–2",brand.SEQ[0]),("3–5",brand.SEQ[1]),
+               ("6–10",brand.SEQ[2]),("11 ou mais",brand.SEQ[3])]
 MAP_CMAP = {k:v for k,v in MAP_CLASSES}
 
 df = pd.read_csv("Mapeamento_SP_limpo_com_RA.csv")
@@ -61,7 +64,7 @@ def emb(fig, div_id):
     return fig.to_html(full_html=False, include_plotlyjs=False,
                        div_id=div_id, config=CONFIG)
 
-def hbar(cats, vals, order=None, color=BLUE, pct=False, suffix="", height=None,
+def hbar(cats, vals, order=None, color=ORANGE, pct=False, suffix="", height=None,
          hovlabel="respostas"):
     data=list(zip(cats,vals))
     if order:
@@ -92,9 +95,9 @@ def grouped_hbar(cats, a_vals, b_vals, a_name, b_name, height=None, suffix=""):
     order=sorted(range(len(cats)), key=lambda i:a_vals[i])
     cats=[cats[i] for i in order]; a_vals=[a_vals[i] for i in order]; b_vals=[b_vals[i] for i in order]
     fig=go.Figure()
-    fig.add_bar(y=cats, x=b_vals, name=b_name, orientation="h", marker_color=ORANGE,
+    fig.add_bar(y=cats, x=b_vals, name=b_name, orientation="h", marker_color=BLUE,
                 hovertemplate="%{y}<br>"+b_name+": <b>%{x}"+suffix+"</b><extra></extra>")
-    fig.add_bar(y=cats, x=a_vals, name=a_name, orientation="h", marker_color=BLUE,
+    fig.add_bar(y=cats, x=a_vals, name=a_name, orientation="h", marker_color=ORANGE,
                 hovertemplate="%{y}<br>"+a_name+": <b>%{x}"+suffix+"</b><extra></extra>")
     fig.update_layout(barmode="group", bargap=0.35, bargroupgap=0.08)
     h=height or max(300, 46*len(cats)+70)
@@ -167,7 +170,7 @@ sp["reg"]=np.where(sp["cidade"]=="São Paulo","Capital (cidade de São Paulo)",
     sp["RA_nome"].map(REG).fillna("Demais regiões do interior"))
 rx=sp["reg"].value_counts()
 DIVS["comps_faixa"]=emb(hbar(list(rx.index),list(rx.values),
-    color=BLUE,height=320,hovlabel="competições"),"g_compsfaixa")
+    color=ORANGE,height=320,hovlabel="competições"),"g_compsfaixa")
 
 # mapa por RA
 allras=["RM de São Paulo","Campinas","Santos","S. J. dos Campos","Ribeirão Preto","Itapeva",
@@ -291,7 +294,7 @@ DIVS["retencao"] = emb(figr, "g_retencao")
 
 ENT = _sp["size"].astype(int)
 fige = go.Figure(go.Bar(
-    y=list(ENT.index), x=list(ENT.values), orientation="h", marker_color=BLUE,
+    y=list(ENT.index), x=list(ENT.values), orientation="h", marker_color=ORANGE,
     text=[f"{v} ({v/N_ESTREANTES_SP*100:.0f}%)" for v in ENT.values],
     textposition="outside", cliponaxis=False, textfont=dict(size=12, color=INK2),
     hovertemplate="%{y}<br><b>%{x}</b> estreantes<extra></extra>"))
@@ -306,7 +309,7 @@ DIVS["entrada"] = emb(fige, "g_entrada")
 # ============================================================
 import demanda_eventos
 DE = demanda_eventos.tabela(df)
-LAT_AZUL = "#9fb6d4"
+LAT_AZUL = "#a8bcd8"
 
 def _quadrante(sub, nome, cor):
     return go.Scatter(
@@ -328,7 +331,7 @@ DE["textpos"] = [TEXTPOS.get(e, "top center") for e in DE["evento"]]
 figq = go.Figure()
 figq.add_shape(type="rect", x0=0, x1=demanda_eventos.OFERTA_BAIXA*100,
                y0=demanda_eventos.TAXA_ALTA*100, y1=132,
-               fillcolor="#fdf1ea", line_width=0, layer="below")
+               fillcolor=brand.SOFT, line_width=0, layer="below")
 figq.add_vline(x=demanda_eventos.OFERTA_BAIXA*100, line_color=GRID, line_width=1)
 figq.add_hline(y=demanda_eventos.TAXA_ALTA*100, line_color=GRID, line_width=1)
 figq.add_trace(_quadrante(DE[DE.latente], "Muito pedido, pouco programado", ORANGE))

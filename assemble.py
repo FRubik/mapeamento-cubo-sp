@@ -20,26 +20,27 @@ def chart(div_key, title, desc):
 </figure>"""
 
 CSS = """
-:root{--blue:#2a78d6;--orange:#eb6834;--ink:#0b0b0b;--ink2:#41403d;--muted:#7c7b74;
---surf:#ffffff;--soft:#f6f8fb;--line:#e7e6e1;--radius:14px;}
+/* paleta da marca — ver brand.py e COLOR_SCHEMA.md */
+:root{--red:#cc0a14;--red-dark:#9c2226;--blue:#2f66b0;--ink:#0b0b0b;--ink2:#46443f;
+--muted:#8a8981;--surf:#ffffff;--soft:#faf6f5;--line:#e7e6e1;--radius:14px;}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:#fbfbfa;color:var(--ink2);
 font-family:"Inter",Segoe UI,system-ui,-apple-system,sans-serif;line-height:1.62;font-size:16.5px;}
 .wrap{max-width:880px;margin:0 auto;padding:0 20px 90px;}
-header.hero{background:linear-gradient(135deg,#2a78d6,#1f5fa8);color:#fff;padding:58px 0 44px;margin-bottom:8px;}
+header.hero{background:linear-gradient(135deg,#151515,#000);color:#fff;padding:58px 0 44px;margin-bottom:8px;}
 header.hero .wrap{padding-bottom:0}
 .kick{letter-spacing:.16em;font-size:12.5px;text-transform:uppercase;opacity:.9;font-weight:700}
 header.hero h1{color:#fff;font-size:34px;line-height:1.12;margin:.35em 0 .25em;font-weight:800;letter-spacing:-.01em}
-header.hero p{color:#eaf1fb;font-size:18px;margin:.2em 0 0;max-width:44em}
+header.hero p{color:#e6e2e0;font-size:18px;margin:.2em 0 0;max-width:44em}
 .cubes{display:flex;gap:6px;margin-bottom:16px}
-.cubes span{width:22px;height:22px;border-radius:5px;border:1px solid rgba(0,0,0,.12)}
+.cubes span{width:22px;height:22px;border-radius:5px;border:1px solid rgba(255,255,255,.25)}
 h2{color:var(--ink);font-size:26px;margin:2.4em 0 .1em;font-weight:800;letter-spacing:-.01em;
 padding-top:.3em;border-top:2px solid var(--line)}
-h2 .num{color:var(--blue);font-weight:800}
+h2 .num{color:var(--red);font-weight:800}
 h3{color:var(--ink);font-size:18px;margin:1.1em 0 .1em;font-weight:700}
 p{margin:.7em 0}
-a{color:var(--blue)}
+a{color:var(--red)}
 .lead{font-size:18px;color:var(--ink2)}
 .chart{margin:1.4em 0 1.8em;background:var(--surf);border:1px solid var(--line);
 border-radius:var(--radius);padding:16px 16px 6px;box-shadow:0 1px 2px rgba(20,20,40,.03)}
@@ -47,13 +48,13 @@ border-radius:var(--radius);padding:16px 16px 6px;box-shadow:0 1px 2px rgba(20,2
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .grid2 .chart{margin:0}
 @media(max-width:680px){.grid2{grid-template-columns:1fr}header.hero h1{font-size:27px}}
-.box{background:var(--soft);border:1px solid #dfe7f2;border-left:4px solid var(--blue);
+.box{background:var(--soft);border:1px solid #f0dcd9;border-left:4px solid var(--red);
 border-radius:10px;padding:14px 18px;margin:1.3em 0}
-.box.warn{background:#fff7f1;border-color:#f6d8c4;border-left-color:var(--orange)}
+.box.warn{background:#fbf6ec;border-color:#eadfc6;border-left-color:#b8790a}
 .box h4{margin:.1em 0 .3em;color:var(--ink);font-size:15.5px;letter-spacing:.02em;text-transform:uppercase}
 .kpis{display:flex;flex-wrap:wrap;gap:12px;margin:1.4em 0}
 .kpi{flex:1;min-width:150px;background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-.kpi b{display:block;font-size:30px;color:var(--blue);font-weight:800;line-height:1}
+.kpi b{display:block;font-size:30px;color:var(--red);font-weight:800;line-height:1}
 .kpi small{color:var(--muted);font-size:13px}
 .gloss{columns:2;column-gap:26px;font-size:15px}
 .gloss dt{font-weight:700;color:var(--ink)}
@@ -61,12 +62,12 @@ border-radius:10px;padding:14px 18px;margin:1.3em 0}
 @media(max-width:680px){.gloss{columns:1}}
 ul.take li{margin:.5em 0}
 footer{border-top:2px solid var(--line);margin-top:3em;padding-top:1.4em;color:var(--muted);font-size:14px}
-.tag{display:inline-block;background:#eef4fc;color:var(--blue);border-radius:999px;
+.tag{display:inline-block;background:#f7e7e6;color:var(--red-dark);border-radius:999px;
 padding:2px 11px;font-size:12.5px;font-weight:600;margin-bottom:.5em}
 """
 
 CUBES = "".join(f'<span style="background:{c}"></span>' for c in
-                ["#ffffff","#f5c518","#009b48","#e0342b","#2a78d6","#eb6834"])
+                ["#ffffff","#cc0a14","#ffffff","#cc0a14","#cc0a14","#ffffff"])
 
 HTML = f"""<!doctype html>
 <html lang="pt-BR">
@@ -136,7 +137,7 @@ HTML = f"""<!doctype html>
 <h2><span class="num">3.</span> "Falta campeonato na capital"?</h2>
 <p>Essa é uma percepção comum entre quem mora na cidade de São Paulo. Fomos aos dados oficiais da WCA (competições de 2023 em diante) para entender se ela se sustenta. A resposta é <b>sim e não</b> — e a parte mais interessante está no interior.</p>
 
-{chart('comps_ano','Competições em São Paulo por ano','Total de competições oficiais no estado. 2026 aparece em laranja porque o ano ainda não terminou.')}
+{chart('comps_ano','Competições em São Paulo por ano','Total de competições oficiais no estado. 2026 aparece em vermelho porque o ano ainda não terminou.')}
 
 <p>Primeiro, o número por região — agora com os nomes que a comunidade usa, já que competição é dado público. A capital <b>não</b> aparece mal: sozinha, a cidade de São Paulo sedia tantos torneios quanto <i>toda</i> a Grande São Paulo (fora a capital) somada. E as regiões vizinhas — Baixada Santista e Campinas — também concentram bastante coisa.</p>
 {chart('comps_faixa','Competições desde 2023, por região','Onde acontecem as competições paulistas. "Demais regiões do interior" reúne todo o Norte, Oeste e Sul do estado.')}
@@ -186,13 +187,13 @@ HTML = f"""<!doctype html>
 
 <h2><span class="num">6.</span> O que a comunidade quer competir × o que aparece</h2>
 <p>Cada competição escolhe quais modalidades vai oferecer. Comparamos o que as pessoas <b>gostariam de ver mais</b> (na pesquisa) com o que <b>de fato apareceu</b> nas competições paulistas desde 2023. O descompasso é claro em duas modalidades muito queridas:</p>
-{chart('dem_of','Demanda × oferta de modalidades','Barra azul: % de quem gostaria de ver a modalidade mais vezes. Barra laranja: % das competições de SP que ofereceram a modalidade.')}
+{chart('dem_of','Demanda × oferta de modalidades','Barra vermelha: % de quem gostaria de ver a modalidade mais vezes. Barra azul: % das competições de SP que ofereceram a modalidade.')}
 <p><b>Megaminx e Skewb</b> estão entre os mais desejados, mas aparecem em apenas cerca de um em cada quatro campeonatos. Vale um detalhe curioso: São Paulo tem uma cena forte de <b>competições especializadas</b> (só Clock, só de olhos vendados, só Big Cubes, só Square-1…) — cerca de um terço dos torneios. O problema é que elas se concentram em cidades como São Bernardo, Cubatão e Campinas, e quase nunca na capital.</p>
 
 <h2><span class="num">7.</span> Popular não é a mesma coisa que faltando</h2>
 <p>O gráfico anterior tem uma armadilha, e vale desarmá-la: contar quantas pessoas pediram uma modalidade mede o <b>tamanho da torcida</b>, não o que está em falta. O 3x3 é o mais praticado de todos — é natural que apareça no topo dos pedidos, mesmo estando em dois terços das competições. A pergunta certa é outra: <b>entre quem já pratica aquela modalidade, que fração gostaria de vê-la mais vezes?</b></p>
 
-<p>É isso que o gráfico abaixo mostra. Cada bolha é uma modalidade; o tamanho dela é quanta gente pratica. Quanto mais à <b>esquerda</b>, menos as competições paulistas a programam. Quanto mais <b>acima</b>, maior a proporção de praticantes insatisfeitos com essa oferta. O canto laranja — muito pedida, pouco programada — é onde mora a <b>demanda latente</b>.</p>
+<p>É isso que o gráfico abaixo mostra. Cada bolha é uma modalidade; o tamanho dela é quanta gente pratica. Quanto mais à <b>esquerda</b>, menos as competições paulistas a programam. Quanto mais <b>acima</b>, maior a proporção de praticantes insatisfeitos com essa oferta. O canto vermelho — muito pedida, pouco programada — é onde mora a <b>demanda latente</b>.</p>
 
 {chart('quadrante','Demanda latente: o que falta × o que só é popular','Cada bolha é uma modalidade. Eixo horizontal: em quantas competições ela aparece. Eixo vertical: quantos dos seus praticantes querem vê-la mais. Passe o mouse para os números.')}
 
@@ -221,12 +222,12 @@ HTML = f"""<!doctype html>
   <figure class="chart"><h3>Maior obstáculo para competir mais</h3><p class="cap">A principal barreira apontada.</p>{D['obstaculo']}</figure>
 </div>
 <p>A distância aparece dos dois lados. E há um detalhe revelador: comparando <b>quanto as pessoas gostariam de viajar</b> com <b>quanto realmente viajam</b>, boa parte já se desloca no limite (ou além) do que gostaria — sinal de que faltam competições perto.</p>
-{chart('viagem','Quanto gostariam de viajar × quanto viajam de fato','Distância máxima desejada (azul) e distância praticada (laranja).')}
+{chart('viagem','Quanto gostariam de viajar × quanto viajam de fato','Distância máxima desejada (vermelho) e distância praticada (azul).')}
 {chart('pagar','Quanto topariam pagar de inscrição','Faixa de preço aceita pela comunidade.')}
 
 <h2><span class="num">9.</span> Como a comunidade quer ser avisada</h2>
 <p>Hoje a maioria descobre as competições pelo site da WCA. Mas, perguntadas sobre como <b>gostariam</b> de ser avisadas, as pessoas colocam o <b>WhatsApp</b> em primeiro lugar — à frente do próprio site e do Instagram.</p>
-{chart('divulg','Como ficam sabendo hoje × como gostariam','Canais de divulgação: uso atual (laranja) e preferência (azul).')}
+{chart('divulg','Como ficam sabendo hoje × como gostariam','Canais de divulgação: uso atual (azul) e preferência (vermelho).')}
 
 <h2><span class="num">10.</span> Em resumo</h2>
 <ul class="take">

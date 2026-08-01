@@ -14,6 +14,14 @@ delegados_sp.tsv
 estreantes_sp.tsv
 
 # ─────────────────────────────────────────────────────────────────
+#  MARCA
+# ─────────────────────────────────────────────────────────────────
+# Logotipo do Cubing SP: fonte das cores do relatório (ver COLOR_SCHEMA.md),
+# mas não é publicado nem usado dentro dos documentos
+logo.jpg
+logo.png
+
+# ─────────────────────────────────────────────────────────────────
 #  DADOS DE TERCEIROS (muito grandes)
 # ─────────────────────────────────────────────────────────────────
 # Export público oficial da WCA (vários GB) — baixe em worldcubeassociation.org/export/results
